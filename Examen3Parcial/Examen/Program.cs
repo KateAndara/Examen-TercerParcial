@@ -2,22 +2,21 @@ using Examen.Data;
 using Examen.Interfaces;
 using Examen.Servicios;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+
+MySQLConfiguration cadenaconexion = new MySQLConfiguration(builder.Configuration.GetConnectionString("MySQL"));
+builder.Services.AddSingleton(cadenaconexion);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-builder.Services.AddHttpContextAccessor();
 
-MySQLConfiguration cadenaConexion = new MySQLConfiguration(builder.Configuration.GetConnectionString("MySQL"));
-builder.Services.AddSingleton(cadenaConexion);
 builder.Services.AddScoped<IUsuarioServicio, UsuarioServicio>();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -31,6 +30,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -39,8 +43,5 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
-app.UseAuthentication();
-app.UseAuthorization();
 
-app.MapControllers();
 

@@ -55,17 +55,17 @@ public class LoginController : Controller
                 }
                 else
                 {
-                    return LocalRedirect("/Login/Usuario inactivo");
+                    return LocalRedirect("/Login/Usuario Inactivo");
                 }
             }
             else
             {
-                return LocalRedirect("/Login/Datos de usuario inválido");
+                return LocalRedirect("/Login/Datos de usuario Invalido");
             }
         }
         catch (Exception ex)
         {
-            return LocalRedirect("/Login/Datos de usuario inválido");
+            return LocalRedirect("/Login/Datos de usuario Invalido");
         }
         return LocalRedirect("/");
     }
